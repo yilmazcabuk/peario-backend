@@ -17,17 +17,12 @@ export class UsersGateway {
     return this.usersService.create(createUserDto);
   }
 
-  @SubscribeMessage('findAllUsers')
-  findAll() {
-    return this.usersService.findAll();
-  }
-
   @SubscribeMessage('findOneUser')
   findOne(@MessageBody() id: number) {
     return this.usersService.findOne(id);
   }
 
-  @SubscribeMessage('updateUser')
+  @SubscribeMessage('user.update')
   update(@MessageBody() updateUserDto: UpdateUserDto) {
     return this.usersService.update(updateUserDto.id, updateUserDto);
   }
@@ -35,5 +30,10 @@ export class UsersGateway {
   @SubscribeMessage('removeUser')
   remove(@MessageBody() id: number) {
     return this.usersService.remove(id);
+  }
+
+  @SubscribeMessage('heartbeat')
+  handleHeartbeat(client: any, payload: any): string {
+    return this.usersService.handleHeartbeat(client, payload);
   }
 }

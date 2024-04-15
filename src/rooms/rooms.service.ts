@@ -2,26 +2,42 @@ import { Injectable } from '@nestjs/common';
 
 import { CreateRoomDto } from './dto/create-room.dto';
 import { UpdateRoomDto } from './dto/update-room.dto';
+import type { Room } from './entities/room.entity';
 
 @Injectable()
 export class RoomsService {
+  private rooms = new Map<string, Room>();
+
   create(createRoomDto: CreateRoomDto) {
-    return 'This action adds a new room';
+    const room = {
+      ...createRoomDto,
+      id: Math.random().toString(36).substr(2, 9),
+    };
+    this.rooms.set(room.id, room);
+    return room;
   }
 
   findAll() {
     return `This action returns all rooms`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} room`;
+  findOne(id: string) {
+    this.rooms.get(id);
   }
 
-  update(id: number, updateRoomDto: UpdateRoomDto) {
-    return `This action updates a #${id} room`;
+  update(id: string, updateRoomDto: UpdateRoomDto) {
+    const room = this.rooms.get(id);
+    if (!room) {
+      return null;
+    }
+    const updatedRoom = {
+      ...room,
+      ...updateRoomDto,
+    };
+    this.rooms.set(id, updatedRoom);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} room`;
+  remove(id: string) {
+    this.rooms.delete(id);
   }
 }

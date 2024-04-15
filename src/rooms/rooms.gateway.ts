@@ -12,7 +12,7 @@ import { RoomsService } from './rooms.service';
 export class RoomsGateway {
   constructor(private readonly roomsService: RoomsService) {}
 
-  @SubscribeMessage('createRoom')
+  @SubscribeMessage('room.create')
   create(@MessageBody() createRoomDto: CreateRoomDto) {
     return this.roomsService.create(createRoomDto);
   }
@@ -35,5 +35,25 @@ export class RoomsGateway {
   @SubscribeMessage('removeRoom')
   remove(@MessageBody() id: number) {
     return this.roomsService.remove(id);
+  }
+
+  @SubscribeMessage('room.join')
+  handleRoomJoin(client: any, payload: any): string {
+    return this.roomsService.handleRoomJoin(client, payload);
+  }
+
+  @SubscribeMessage('room.message')
+  handleRoomMessage(client: any, payload: any): string {
+    return this.roomsService.handleRoomMessage(client, payload);
+  }
+
+  @SubscribeMessage('room.updateOwnership')
+  handleRoomUpdateOwnership(client: any, payload: any): string {
+    return this.roomsService.handleRoomUpdateOwnership(client, payload);
+  }
+
+  @SubscribeMessage('player.sync')
+  handlePlayerSync(client: any, payload: any): string {
+    return this.roomsService.handlePlayerSync(client, payload);
   }
 }
